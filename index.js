@@ -1,6 +1,7 @@
 const selectedField = document.querySelector('.Selected');
 const textField = document.querySelector('.TextField');
 const boldButton = document.querySelector('.Bold');
+const italicButton = document.querySelector('.Italic');
 
 let selection;
 let range;
@@ -14,7 +15,7 @@ function undoBold() {
   range.insertNode(text);
 }
 
-function insertBold(tagString) {
+function insertStyle(tagString) {
   let tag = document.createElement(tagString);
   tag.textContent = selection.toString();
   range.deleteContents();
@@ -30,7 +31,6 @@ document.addEventListener('selectionchange', (e) => {
   selection = document.getSelection();
   range = selection.getRangeAt(0);
   selectedField.innerHTML = selection.toString();
-  console.log(selection);
 });
 
 boldButton.addEventListener('click', (e) => {
@@ -39,12 +39,30 @@ boldButton.addEventListener('click', (e) => {
   const parent_anchor = selection.anchorNode.parentElement.tagName;
   const parent_focus = selection.focusNode.parentElement.tagName;
   const base = selection.baseNode.tagName;
+  console.log(anchor, focus, parent_anchor, parent_focus, base);
 
   (anchor === 'B' && focus === 'B') ||
   (parent_anchor === 'B' && parent_focus === 'B')
     ? undoBold()
-    : insertBold('b');
+    : insertStyle('b');
   ((anchor === 'B' && focus === 'B' && base !== 'B') ||
     (parent_anchor === 'B' && parent_focus === 'B' && base !== 'B')) &&
-    insertBold('b');
+    insertStyle('b');
+});
+
+italicButton.addEventListener('click', (e) => {
+  const anchor = selection.anchorNode.tagName;
+  const focus = selection.focusNode.tagName;
+  const parent_anchor = selection.anchorNode.parentElement.tagName;
+  const parent_focus = selection.focusNode.parentElement.tagName;
+  const base = selection.baseNode.tagName;
+  console.log(anchor, focus, parent_anchor, parent_focus, base);
+
+  (anchor === 'I' && focus === 'I') ||
+  (parent_anchor === 'I' && parent_focus === 'I')
+    ? undoBold()
+    : insertStyle('i');
+  ((anchor === 'I' && focus === 'I' && base !== 'I') ||
+    (parent_anchor === 'I' && parent_focus === 'I' && base !== 'I')) &&
+    insertStyle('i');
 });
